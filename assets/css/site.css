@@ -1,0 +1,30 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: #ddeae7;
+}
+
+.text-short {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 80px;
+    overflow: hidden;
+}
+
+.name-email-block {
+    display: flex;
+}
+
+.name-block,
+.email-block {
+    display: inline-flex;
+    flex-direction: column;
+    margin-right: 120px;
+}
+
+.title {
+    margin-bottom: 30px;
+}
