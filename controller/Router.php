@@ -31,7 +31,7 @@ class Router
     {
         $this->getController($file, $controller, $action, $args);
         if (is_readable($file) == false) {
-            die ('Страница не найдена');
+            header( 'Location: /site/error', true, 303);
         }
 
         include($file);
@@ -39,7 +39,7 @@ class Router
         $action = $action . 'Action';
         $controller = new $class($this->registry);
         if (is_callable([$controller, $action]) == false) {
-            die ('Страница не найдена');
+            header( 'Location: /site/error', true, 303);
         }
 
         if (is_array($args)) {
