@@ -9,11 +9,6 @@ class User extends Record
 {
     protected $tableName = 'user';
 
-    public function delete()
-    {
-
-    }
-
     public function save($insert = false)
     {
         $db = $this->registry->db;

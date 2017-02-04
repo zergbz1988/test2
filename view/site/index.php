@@ -16,8 +16,6 @@ $this->vars['title'] = 'Все отзывы';
         <table class="table table-striped table-bordered table-responsive">
             <thead>
             <tr>
-                <th>Имя автора</th>
-                <th>Email автора</th>
                 <th>Заголовок отзыва</th>
                 <th>Краткий текст отзыва</th>
                 <th>Действия</th>
@@ -26,12 +24,11 @@ $this->vars['title'] = 'Все отзывы';
             <tbody>
             <?php foreach ($models as $model) { ?>
                 <tr>
-                    <td><?= $model->attributes['name'] ?></td>
-                    <td><?= $model->attributes['email'] ?></td>
                     <td><?= $model->attributes['title'] ?></td>
                     <td class="text-short"><?= $model->attributes['message'] ?></td>
                     <td>
                         <a href="/site/view/<?= $model->pk ?>"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a href="/site/delete/<?= $model->pk ?>" class="delete-review-btn"><i class="glyphicon glyphicon-trash"></i></a>
                     </td>
                 </tr>
             <?php } ?>

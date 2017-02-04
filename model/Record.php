@@ -64,6 +64,12 @@ abstract class Record
         return true;
     }
 
-    abstract public function delete();
+    public function delete() {
+        $db = $this->registry->db;
+        $sql = "DELETE FROM " . $this->tableName . " WHERE id =  :id";
+        $query = $db->prepare($sql);
+        $query->execute(['id' => $this->pk]);
+    }
+
     abstract public function save($insert = false);
 }

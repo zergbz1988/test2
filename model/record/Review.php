@@ -8,14 +8,50 @@ class Review extends Record
 {
     protected $tableName = 'review';
 
-    public function delete ()
+    public function save($insert = false)
     {
-
-    }
-
-    public function save ($insert = false)
-    {
-
+        $db = $this->registry->db;
+        if ($insert) {
+            $sql = "INSERT INTO review (id,
+            name,
+            email,
+            title,
+            message,
+            approved) VALUES (
+            :id, 
+            :name, 
+            :email,
+            :title,
+            :message, 
+            :approved)";
+            $query = $db->prepare($sql);
+            $query->execute([
+                'id' => null,
+                'name' => $this->attributes['name'],
+                'title' => $this->attributes['title'],
+                'email' => $this->attributes['email'],
+                'message' => $this->attributes['message'],
+                'approved' => 0,
+            ]);
+        } else {
+            $sql = "UPDATE review SET id = :id, 
+            name = :name, 
+            email = :email,  
+            title = :title,
+            message = :message,  
+            approved = :approved  
+            WHERE id = :id";
+            /* @var $this ->registry->db PDO */
+            $query = $db->prepare($sql);
+            $query->execute([
+                'id' => $this->pk,
+                'name' => $this->attributes['name'],
+                'email' => $this->attributes['email'],
+                'title' => $this->attributes['title'],
+                'message' => $this->attributes['message'],
+                'approved' => $this->attributes['approved'],
+            ]);
+        }
     }
 
     public function findApproved()

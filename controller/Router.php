@@ -31,7 +31,7 @@ class Router
     {
         $this->getController($file, $controller, $action, $args);
         if (is_readable($file) == false) {
-            Router::ErrorPage404();
+            die ('Страница не найдена');
         }
 
         include($file);
@@ -39,7 +39,7 @@ class Router
         $action = $action . 'Action';
         $controller = new $class($this->registry);
         if (is_callable([$controller, $action]) == false) {
-            Router::ErrorPage404();
+            die ('Страница не найдена');
         }
 
         if (is_array($args)) {
@@ -87,14 +87,6 @@ class Router
 
         $file = $cmd_path . $controller . '.php';
         $args = $parts;
-    }
-
-    function ErrorPage404()
-    {
-        $host = 'http://' . $_SERVER['HTTP_HOST'] . '/';
-        header('HTTP/1.1 404 Not Found');
-        header("Status: 404 Not Found");
-        header('Location:' . $host . '404');
     }
 }
 
