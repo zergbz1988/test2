@@ -13,8 +13,32 @@ class Site extends Action
     function indexAction()
     {
         $model = new Review($this->registry);
+        $models = $model->findApproved();
+
+        $model = new SendReviewForm($this->registry);
+        $data = $_POST['SendReviewForm'] ?? null;
+        if ($data) {
+            $model->load($data);
+            $validate = $model->validate();
+            if ($validate === true) {
+                $model->send();
+                header( 'Location: /site/index', true, 303);
+            } else {
+                $error = $validate;
+                echo $this->render('index', ['models' => $models, 'reviewForm' => $model, 'error' => $error]);
+                return;
+            }
+        }
+
+        echo $this->render('index', ['models' => $models, 'reviewForm' => $model]);
+    }
+
+    function allAction()
+    {
+        $model = new Review($this->registry);
         $models = $model->findAll();
-        echo $this->render('index', ['models' => $models]);
+
+        echo $this->render('all', ['models' => $models]);
     }
 
     function viewAction($args)
@@ -58,26 +82,6 @@ class Site extends Action
         }
 
         echo $this->render('register', ['model' => $model]);
-    }
-
-    function sendAction()
-    {
-        $model = new SendReviewForm($this->registry);
-        $data = $_POST['SendReviewForm'] ?? null;
-        if ($data) {
-            $model->load($data);
-            $validate = $model->validate();
-            if ($validate === true) {
-                $model->send();
-                header( 'Location: /site/index', true, 303);
-            } else {
-                $error = $validate;
-                echo $this->render('send', ['model' => $model, 'error' => $error]);
-                return;
-            }
-        }
-
-        echo $this->render('send', ['model' => $model]);
     }
 
     function errorAction()
