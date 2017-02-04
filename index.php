@@ -32,12 +32,14 @@ if (!file_exists($layout)) {
 }
 
 $registry->layout = $layout;
+
 $view = new View($registry);
 $registry->view = $view;
 
 $router = new Router($registry);
 $registry->router = $router;
-$router->setPath(webroot . 'controller\action');
+$router->setPath(webroot . 'controller/action');
+
 $router->delegate();
 
 

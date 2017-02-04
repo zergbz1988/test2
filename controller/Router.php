@@ -16,31 +16,36 @@ class Router
 
     function setPath($path)
     {
-        $path = trim($path, '/\\');
-
         $path .= DS;
 
         if (is_dir($path) == false) {
             throw new Exception('Invalid controller path: `' . $path . '`');
         }
-
+        
         $this->path = $path;
     }
 
     function delegate()
     {
         $this->getController($file, $controller, $action, $args);
+
         if (is_readable($file) == false) {
             header( 'Location: /site/error', true, 303);
+            exit;
         }
 
         include($file);
-        $class = 'test2\controller\action' . DS . $controller;
+        $class = 'test2\controller\action\\' .  mb_convert_case ($controller, MB_CASE_TITLE);
+        
         $action = $action . 'Action';
         $controller = new $class($this->registry);
+       
+
         if (is_callable([$controller, $action]) == false) {
             header( 'Location: /site/error', true, 303);
+            exit;
         }
+
 
         if (is_array($args)) {
             $controller->$action($args);
@@ -57,11 +62,12 @@ class Router
         }
 
         $route = trim($route, '/\\');
+        
         $parts = explode('/', $route);
         $cmd_path = $this->path;
 
         foreach ($parts as $part) {
-            $fullpath = $cmd_path . $part;
+            $fullpath = $cmd_path . mb_convert_case ($part, MB_CASE_TITLE);
             if (is_dir($fullpath)) {
                 $cmd_path .= $part . DS;
                 array_shift($parts);
@@ -75,6 +81,7 @@ class Router
             }
 
         }
+        
         if (empty($controller)) {
             $controller = 'site';
         };
@@ -85,7 +92,7 @@ class Router
             $action = 'index';
         }
 
-        $file = $cmd_path . $controller . '.php';
+        $file = $cmd_path . mb_convert_case ($controller, MB_CASE_TITLE) . '.php';
         $args = $parts;
     }
 }
