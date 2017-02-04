@@ -11,15 +11,19 @@ class View
         $this->registry = $registry;
     }
 
-    function __set($varname, $value)
+    function __set($key, $value)
     {
-      /*  if (isset($this->vars[$varname]) == true) {
-            trigger_error('Unable to set var `' . $varname . '`. Already set, and overwrite not allowed.', E_USER_NOTICE);
-            return false;
-        }*/
+        $this->vars[$key] = $value;
+    }
 
-        $this->vars[$varname] = $value;
-        return true;
+    function __get($key)
+    {
+        return $this->vars[$key] ?? null;
+    }
+
+    public function __isset($key)
+    {
+        return isset($this->vars[$key]);
     }
 
     function __unset($varname)

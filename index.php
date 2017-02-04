@@ -22,6 +22,9 @@ $registry = Registry::getInstance();
 $db = new PDO('mysql:host=localhost;dbname=test2', 'root', '');
 $registry->db = $db;
 
+session_start();
+$registry->session = $_SESSION;
+
 $layout = __DIR__ . '/view/layout/main.php';
 
 if (!file_exists($layout)) {

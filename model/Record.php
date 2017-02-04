@@ -35,6 +35,10 @@ abstract class Record
         return $result;
     }
 
+    /**
+     * @param $id
+     * @return null | Record
+     */
     public function findOne($id)
     {
         /* @var $this ->registry->db PDO */

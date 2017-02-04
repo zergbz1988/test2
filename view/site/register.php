@@ -4,13 +4,13 @@
  * @var $model \test2\model\form\RegisterForm
  */
 
-$this->vars['title'] = 'Регистрация нового пользователя';
+$this->title = 'Регистрация нового пользователя';
 
 ?>
 
 <div class="row">
     <div class="col-xs-12">
-        <div class="h2 title"><?= $this->vars['title'] ?></div>
+        <div class="h2 title"><?= $this->title ?></div>
     </div>
     <div class="col-xs-6 panel">
         <form id="registerForm" class="form-horizontal panel-body" action="/site/register" method="post">

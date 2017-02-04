@@ -6,11 +6,15 @@
  * Time: 19:29
  */
 
-$this->vars['title'] = 'Страница не найдена!';
+$this->title = 'Страница не найдена!';
 ?>
 
 <div class="row">
     <div class="col-xs-12">
-        <div class="h1 title" style="color: #c03709;"><?= $this->vars['title'] ?></div>
+        <div class="panel">
+            <div class="panel-body">
+                <div class="h1 title" style="color: #c03709;"><?= $this->title ?></div>
+            </div>
+        </div>
     </div>
 </div>

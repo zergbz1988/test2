@@ -28,3 +28,36 @@ body {
 .title {
     margin-bottom: 30px;
 }
+
+.grid-btn {
+    font-size: 16px;
+}
+
+a .grid-btn {
+    margin-right: 62px;
+}
+
+a:last-child .grid-btn {
+    margin-right: 0;
+}
+
+.action-column {
+    width: 250px;
+}
+
+.flash {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    font-weight: 700;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.flash-success {
+    background-color: #dfffd3;
+}
+
+.flash-error {
+    background-color: #ffdbd2;
+}

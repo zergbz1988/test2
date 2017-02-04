@@ -10,6 +10,7 @@ final class Registry
 {
     private static $_instance = null;
     private $vars = [];
+    public $session;
 
     private function __construct()
     {
@@ -40,13 +41,18 @@ final class Registry
         return true;
     }
 
-    public function __get($key)
+    public function &__get($key)
     {
         if (isset($this->vars[$key]) == false) {
             return null;
         }
 
         return $this->vars[$key];
+    }
+
+    public function __isset($key)
+    {
+        return isset($this->vars[$key]);
     }
 
     public function __unset($key)

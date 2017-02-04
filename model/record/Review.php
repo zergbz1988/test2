@@ -8,6 +8,12 @@ class Review extends Record
 {
     protected $tableName = 'review';
 
+    public function approve ()
+    {
+        $this->attributes['approved'] = true;
+        $this->save(false);
+    }
+
     public function save($insert = false)
     {
         $db = $this->registry->db;
@@ -56,9 +62,21 @@ class Review extends Record
 
     public function findApproved()
     {
+        return $this->findAllByCondition('approved = :approved', ['approved' => true]);
+    }
+
+    public function findNotApproved()
+    {
+        return $this->findAllByCondition('approved = :approved', ['approved' => false]);
+    }
+
+    public function findAllByCondition($condition, $params = [])
+    {
+        $queryCondition = $condition ? ' WHERE ' . $condition : '';
+
         /* @var $this ->registry->db PDO */
-        $rows = $this->registry->db->prepare('SELECT * FROM ' . $this->tableName . 'WHERE approved=1');
-        $rows->execute();
+        $rows = $this->registry->db->prepare('SELECT * FROM ' . $this->tableName . $queryCondition);
+        $rows->execute($params);
         $result = [];
         while ($row = $rows->fetch(PDO::FETCH_ASSOC)) {
             $calledClassName = get_called_class();
@@ -71,5 +89,12 @@ class Review extends Record
         }
 
         return $result;
+    }
+
+    public function delete() {
+        $db = $this->registry->db;
+        $sql = "DELETE FROM " . $this->tableName . " WHERE id =  :id";
+        $query = $db->prepare($sql);
+        $query->execute(['id' => $this->pk]);
     }
 }

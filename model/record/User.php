@@ -50,13 +50,20 @@ class User extends Record
         }
     }
 
-    public function login($data)
+    public function isAdmin($id)
     {
+        $user = $this->findOne($id);
+        if (!($user instanceof self)) {
+            return false;
+        } elseif ($user->attributes['isAdmin'] == 1) {
+            return true;
+        }
 
+        return false;
     }
 
     public function setPassword($password)
     {
-        $this->attributes['password_hash'] =  password_hash($password, PASSWORD_DEFAULT, ['cost' => 13]);
+        $this->attributes['password_hash'] = password_hash($password, PASSWORD_DEFAULT, ['cost' => 13]);
     }
 }

@@ -2,37 +2,28 @@
 namespace test2\model\form;
 
 use test2\model\record\User;
+use PDO;
 
-class RegisterForm
+class LoginForm
 {
     protected $registry;
-    public $name;
     public $email;
     public $password;
+    /* @var $user User*/
     private $user;
 
-    function __construct($registry, $user = null)
+    function __construct($registry)
     {
         $this->registry = $registry;
-        if ($user === null) {
-            $this->user = new User($this->registry);
-        } else {
-            $this->user = $user;
-        }
-
-        $this->name = '';
+        $this->user = new User($this->registry);
         $this->email = '';
         $this->password = '';
     }
 
-    public function register()
+    public function login()
     {
-        $user = $this->user;
         /* @var $user User */
-        $user->attributes['name'] = $this->name;
-        $user->attributes['email'] = $this->email;
-        $user->setPassword($this->password);
-        $user->save(true);
+        $user = $this->user;
         $_SESSION['user_id'] = $user->pk;
     }
 
@@ -52,20 +43,8 @@ class RegisterForm
 
         $query = $this->registry->db->prepare("SELECT COUNT(id) FROM user WHERE email=:email");
         $query->execute(['email' => $this->email]);
-        if ($query->fetchColumn() > 0) {
-            return ['email' => "Пользователь с таким email уже существует в базе данных"];
-        }
-
-        if (empty($this->name)) {
-            return ['name' => "Необходимо заполнить имя"];
-        }
-
-        if (!preg_match('/^[a-zA-Zа-яА-Я]+$/', $this->name)) {
-            return ['name' => "Имя может состоять только из букв"];
-        }
-
-        if (strlen($this->name) > 60) {
-            return ['name' => "Имя может быть не длиннее 60 символов"];
+        if ($query->fetchColumn() == 0) {
+            return ['email' => "Пользователь с таким email не найден в базе данных"];
         }
 
         if (empty($this->password)) {
@@ -74,6 +53,13 @@ class RegisterForm
 
         if (strlen($this->password) < 6 || strlen($this->password) > 32) {
             return ['password' => "Пароль может быть не короче 6 и длиннее 32 символов"];
+        }
+
+        $query = $this->registry->db->prepare("SELECT * FROM user WHERE email=:email");
+        $query->execute(['email' => $this->email]);
+        $this->user = $this->user->findOne($query->fetch(PDO::FETCH_ASSOC)['id']);
+        if (!password_verify($this->password, $this->user->attributes['password_hash'])) {
+            return ['password' => "Введен неправильный пароль. Попробуйте еще раз"];
         }
 
         return true;

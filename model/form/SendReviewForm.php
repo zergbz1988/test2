@@ -32,8 +32,7 @@ class SendReviewForm
 
     function checkCode($code)
     {
-        session_start();
-        $cap = $_SESSION['captcha'] ?? '';
+        $cap = $this->registry->session['captcha'] ?? '';
         unset($_SESSION['captcha']);
 
         $code = trim($code);
@@ -100,8 +99,8 @@ class SendReviewForm
             return ['message' => "Необходимо заполнить текст отзыва"];
         }
 
-        if (strlen($this->message) < 6 || strlen($this->message) > 300) {
-            return ['message' => "Текст отзыва может быть не короче 6 и длиннее 300 символов"];
+        if (strlen($this->message) < 6 || strlen($this->message) > 2000) {
+            return ['message' => "Текст отзыва может быть не короче 6 и длиннее 2000 символов"];
         }
 
         if (empty($this->code)) {
